@@ -1,0 +1,77 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+
+    // ----------------------------------
+    // Debug Scaffolder (asks for year/day)
+    // ----------------------------------
+    {
+      "name": "Debug Scaffolder",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build-scaffolder",
+      "program": "${workspaceFolder}/Tools/Scaffolder/bin/Debug/net10.0/Scaffolder.dll",
+      "args": [
+        "${input:scafYear}",
+        "${input:scafDay}"
+      ],
+      "cwd": "${workspaceFolder}/Tools/Scaffolder",
+      "console": "integratedTerminal",
+      "stopAtEntry": false
+    },
+
+    // ----------------------------------
+    // Debug AoC Runner (asks for year/day)
+    // ----------------------------------
+    {
+      "name": "Debug AoC Runner",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build-runner",
+      "program": "${workspaceFolder}/Runner/bin/Debug/net10.0/Runner.dll",
+      "args": [
+        // Only pass arguments if user entered them
+        // Your runner handles empty == auto-detect
+        "--year", "${input:runYear}",
+        "--day", "${input:runDay}"
+      ],
+      "cwd": "${workspaceFolder}/Runner",
+      "console": "integratedTerminal",
+      "stopAtEntry": false
+    }
+  ],
+
+
+  // ------------------------------
+  // Input prompts (shared across configs)
+  // ------------------------------
+  "inputs": [
+    // Scaffolder prompts
+    {
+      "id": "scafYear",
+      "type": "promptString",
+      "description": "Scaffold Year",
+      "default": "2025"
+    },
+    {
+      "id": "scafDay",
+      "type": "promptString",
+      "description": "Scaffold Day (01–25)",
+      "default": "01"
+    },
+
+    // Runner prompts
+    {
+      "id": "runYear",
+      "type": "promptString",
+      "description": "AoC Year (leave empty for latest)",
+      "default": ""
+    },
+    {
+      "id": "runDay",
+      "type": "promptString",
+      "description": "Day (leave empty for latest)",
+      "default": ""
+    }
+  ]
+}

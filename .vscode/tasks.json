@@ -1,0 +1,37 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+
+    // ------------------------------
+    // Build Scaffolder
+    // ------------------------------
+    {
+      "label": "build-scaffolder",
+      "type": "process",
+      "command": "dotnet",
+      "args": [
+        "build",
+        "${workspaceFolder}/Tools/Scaffolder/Scaffolder.csproj",
+        "--configuration",
+        "Debug"
+      ],
+      "problemMatcher": "$msCompile"
+    },
+
+    // ------------------------------
+    // Build Runner
+    // ------------------------------
+    {
+      "label": "build-runner",
+      "type": "process",
+      "command": "dotnet",
+      "args": [
+        "build",
+        "${workspaceFolder}/Runner/Runner.csproj",
+        "--configuration",
+        "Debug"
+      ],
+      "problemMatcher": "$msCompile"
+    }
+  ]
+}
