@@ -4,39 +4,29 @@ namespace AoC2025;
 
 public class Day04 : IDay
 {
-private static readonly (int dx, int dy)[] Directions = [
-        (-1,-1), (0,-1), (1,-1),
-        (-1,0),          (1, 0),
-        (-1,1),  (0, 1), (1, 1)
-    ];
     public string RunPart1(string[] input)
     {
+        var grid = input.ToCharMatrix();
         var nbrOfAccessibleRolls = 0;
-        var maxY = input.Length - 1;
-        var maxX = input[0].Length - 1;
 
-        for (int y = 0; y < input.Length; y++)
+        for (var y = 0; y < input.Length; y++)
         {
             var row = input[y];
-            for (int x = 0; x < row.Length; x++)
+            for (var x = 0; x < row.Length; x++)
             {
                 var p = row[x];
-                if (p == '@')
+
+                if (p == '.') 
+                    continue;
+
+                var nbrOfAdjacentRolls = 0;
+                grid.ForEachNeighbour8(x, y, c =>
                 {
-                    var nbrOfAdjacentRolls = 0;
-                    foreach (var (dx, dy) in Directions)
-                    {
-                        int nx = x + dx;
-                        int ny = y + dy;
+                    if (c == '@')
+                        nbrOfAdjacentRolls++;
+                });
 
-                        if (nx < 0 || nx > maxX || ny < 0 || ny > maxY)
-                            continue;
-
-                        var adjacent = input[ny][nx];
-                        nbrOfAdjacentRolls += adjacent == '@' ? 1 : 0;
-                    }
-                    nbrOfAccessibleRolls += nbrOfAdjacentRolls < 4 ? 1 : 0;
-                }
+                nbrOfAccessibleRolls += nbrOfAdjacentRolls < 4 ? 1 : 0;
             }
         }
 
@@ -69,28 +59,27 @@ private static readonly (int dx, int dy)[] Directions = [
 
                         var nbrOfAdjacentRolls = 0;
                         for (var i_y = startY; i_y <= endY; i_y++)
+                        for (var i_x = startX; i_x <= endX; i_x++)
                         {
-                            for (var i_x = startX; i_x <= endX; i_x++)
-                            {
-                                if (i_x == x && i_y == y) continue;
-                                var adjacent = currentArrangement[i_y][i_x];
-                                nbrOfAdjacentRolls += adjacent == '@' ? 1 : 0;
-                            }
+                            if (i_x == x && i_y == y) continue;
+                            var adjacent = currentArrangement[i_y][i_x];
+                            nbrOfAdjacentRolls += adjacent == '@' ? 1 : 0;
                         }
+
                         if (nbrOfAdjacentRolls < 4)
                         {
                             nbrOfAccessibleRolls++;
                             markedForRemoval.Add((x, y));
                         }
                     }
+
                     x++;
                 }
+
                 y++;
             }
-            if (nbrOfAccessibleRolls == 0)
-            {
-                break;
-            }
+
+            if (nbrOfAccessibleRolls == 0) break;
 
             total += nbrOfAccessibleRolls;
 
@@ -102,21 +91,20 @@ private static readonly (int dx, int dy)[] Directions = [
                 if (rollsToRemove.Count != 0)
                 {
                     var nextRow = row.ToArray();
-                    foreach (var roll in rollsToRemove)
-                    {
-                        nextRow[roll] = '.';
-                    }
+                    foreach (var roll in rollsToRemove) nextRow[roll] = '.';
                     nextArrangement.Add(new string(nextRow));
                 }
                 else
                 {
                     nextArrangement.Add(row);
                 }
+
                 y2++;
             }
 
             currentArrangement = nextArrangement;
         }
+
         return total.ToString();
     }
 }
